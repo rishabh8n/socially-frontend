@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/userStore";
+import { Link } from "react-router";
 
 const HomePage = () => {
   const { isAuthenticated, user, signout } = useUserStore();
@@ -15,7 +16,11 @@ const HomePage = () => {
           <Button onClick={handleSignout}>Sign out</Button>
         </>
       ) : (
-        <h1>Home Page</h1>
+        <>
+          <h1>Home Page</h1>
+          <Link to="/auth/signin">Signin</Link>
+          <Link to="/auth/signup">Signup</Link>
+        </>
       )}
     </div>
   );
