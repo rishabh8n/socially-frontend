@@ -17,7 +17,7 @@ const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
 };
 
 function App() {
-  const { isChecking, checkAuth, isAuthenticated, user } = useUserStore();
+  const { isChecking, checkAuth } = useUserStore();
 
   useEffect(() => {
     checkAuth();

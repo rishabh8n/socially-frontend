@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/userStore";
-import React from "react";
 
 const HomePage = () => {
   const { isAuthenticated, user, signout } = useUserStore();
