@@ -23,7 +23,7 @@ export const useUserStore = create<UserStore>((set) => ({
   signup: async (email: string, username: string, password: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await axios.post("/auth/register", {
+      await axios.post("/auth/register", {
         email,
         username,
         password,
