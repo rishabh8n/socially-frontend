@@ -8,4 +8,21 @@ const instance = axios.create({
   withCredentials: true,
 });
 
+instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    if (error.response.status === 401) {
+      console.log("Unauthorized");
+      try {
+        const response = await instance.post("/auth/refresh-token");
+        if (response.status === 200) {
+          return instance.request(error.config);
+        }
+      } catch (error) {}
+    }
+    return Promise.reject(error);
+  }
+);
 export default instance;

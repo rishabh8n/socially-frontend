@@ -7,6 +7,7 @@ interface UserStore {
   error: string | null;
   isLoading: boolean;
   isChecking: boolean;
+  clearError: () => void;
   signup: (email: string, username: string, password: string) => Promise<void>;
   signin: (email: string, password: string) => Promise<void>;
   googleSignin: (code: string) => Promise<void>;
@@ -20,6 +21,8 @@ export const useUserStore = create<UserStore>((set) => ({
   error: null,
   isLoading: false,
   isChecking: true,
+
+  clearError: () => set({ error: null }),
 
   signup: async (email: string, username: string, password: string) => {
     try {
@@ -46,14 +49,12 @@ export const useUserStore = create<UserStore>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const response = await axios.post("/auth/login", { email, password });
-      console.log(response);
       set({
         user: response.data.data.user,
         isAuthenticated: true,
         isLoading: false,
       });
     } catch (error: any) {
-      console.log(error);
       set({
         error: error?.response?.data.message || "Error signing in",
         isLoading: false,

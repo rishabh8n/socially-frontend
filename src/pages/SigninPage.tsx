@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useUserStore } from "@/store/userStore";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -32,8 +32,11 @@ const SigninPage = () => {
       password: "",
     },
   });
+  const { signin, error, isLoading, googleSignin, clearError } = useUserStore();
 
-  const { signin, error, isLoading, googleSignin } = useUserStore();
+  useEffect(() => {
+    clearError();
+  }, []);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);

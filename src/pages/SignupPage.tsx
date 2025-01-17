@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useUserStore } from "@/store/userStore";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -35,9 +35,13 @@ const SignupPage = () => {
   });
   const navigate = useNavigate();
 
-  const { signup, error, isLoading, googleSignin } = useUserStore();
+  const { signup, error, isLoading, googleSignin, clearError } = useUserStore();
+
+  useEffect(() => {
+    clearError();
+  }, []);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
     try {
       await signup(data.email, data.username, data.password);
       navigate("/auth/signin");
