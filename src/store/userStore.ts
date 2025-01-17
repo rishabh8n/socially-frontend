@@ -9,6 +9,7 @@ interface UserStore {
   isChecking: boolean;
   signup: (email: string, username: string, password: string) => Promise<void>;
   signin: (email: string, password: string) => Promise<void>;
+  googleSignin: (code: string) => Promise<void>;
   signout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -61,6 +62,24 @@ export const useUserStore = create<UserStore>((set) => ({
     }
   },
 
+  googleSignin: async (code: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await axios.get(`/auth/google?code=${code}`);
+      set({
+        user: response.data.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error: any) {
+      set({
+        error: error?.response?.data.message || "Error signing in",
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
+
   signout: async () => {
     try {
       set({ isLoading: true, error: null });
@@ -80,14 +99,12 @@ export const useUserStore = create<UserStore>((set) => ({
     try {
       set({ isChecking: true, error: null });
       const response = await axios.get("/auth/me");
-      console.log(response);
       set({
         user: response.data.data,
         isAuthenticated: true,
         isChecking: false,
       });
     } catch (error) {
-      console.log(error);
       set({ isChecking: false });
     }
   },

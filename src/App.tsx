@@ -11,7 +11,6 @@ import { ReactNode } from "react";
 
 const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
-  console.log(user);
   if (isAuthenticated && user.isVerified) return <Navigate to="/" />;
   return children;
 };
@@ -23,7 +22,12 @@ function App() {
     checkAuth();
   }, []);
 
-  if (isChecking) return <div>Checking...</div>;
+  if (isChecking)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="loader"></div>
+      </div>
+    );
 
   return (
     <>

@@ -16,6 +16,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useUserStore } from "@/store/userStore";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -34,7 +35,7 @@ const SignupPage = () => {
   });
   const navigate = useNavigate();
 
-  const { signup, error, isLoading } = useUserStore();
+  const { signup, error, isLoading, googleSignin } = useUserStore();
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
     try {
@@ -44,6 +45,22 @@ const SignupPage = () => {
       console.log(error);
     }
   };
+
+  const response = async (authResult: any) => {
+    try {
+      if (authResult.code) {
+        await googleSignin(authResult.code);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: response,
+    onError: response,
+    flow: "auth-code",
+  });
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -56,6 +73,7 @@ const SignupPage = () => {
       <Button
         variant={"outline"}
         className="w-80 py-6 text-[16px] flex items-center justify-center gap-2"
+        onClick={googleLogin}
       >
         <FcGoogle className="text-lg" />
         Sign in with Google

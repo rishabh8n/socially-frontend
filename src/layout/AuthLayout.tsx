@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const AuthLayout = () => {
   return (
@@ -20,4 +21,12 @@ const AuthLayout = () => {
   );
 };
 
-export default AuthLayout;
+const GoogleAuthWrapper = () => {
+  return (
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <AuthLayout />
+    </GoogleOAuthProvider>
+  );
+};
+
+export default GoogleAuthWrapper;
