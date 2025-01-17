@@ -109,6 +109,7 @@ const SigninPage = () => {
                     />
                     <Button
                       variant={"ghost"}
+                      type="button"
                       className="absolute top-[50%] translate-y-[-50%] right-0"
                       onClick={(e) => {
                         e.preventDefault();

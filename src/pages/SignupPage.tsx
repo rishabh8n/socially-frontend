@@ -134,6 +134,7 @@ const SignupPage = () => {
                     <Button
                       variant={"ghost"}
                       className="absolute top-[50%] translate-y-[-50%] right-0"
+                      type="button"
                       onClick={(e) => {
                         e.preventDefault();
                         setPasswordVisible((prev) => !prev);
