@@ -14,13 +14,14 @@ instance.interceptors.response.use(
   },
   async (error) => {
     if (error.response.status === 401) {
-      console.log("Unauthorized");
       try {
         const response = await instance.post("/auth/refresh-token");
         if (response.status === 200) {
           return instance.request(error.config);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
     return Promise.reject(error);
   }

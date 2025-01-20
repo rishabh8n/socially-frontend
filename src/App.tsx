@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 // redirect authenticated users to the home page
 import { ReactNode } from "react";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
 
 const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -42,6 +43,7 @@ function App() {
         >
           <Route path="signup" element={<SignupPage />} />
           <Route path="signin" element={<SigninPage />} />
+          <Route path="verify" element={<EmailVerificationPage />} />
         </Route>
         <Route path="/" element={<HomePage />} />
       </Routes>

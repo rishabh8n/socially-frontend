@@ -44,7 +44,7 @@ const SignupPage = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await signup(data.email, data.username, data.password);
-      navigate("/auth/signin");
+      navigate(`/auth/verify?email=${data.email}`);
     } catch (error) {
       console.log(error);
     }

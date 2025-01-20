@@ -13,6 +13,7 @@ interface UserStore {
   googleSignin: (code: string) => Promise<void>;
   signout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  verifyEmail: (email: string, code: string) => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -39,6 +40,30 @@ export const useUserStore = create<UserStore>((set) => ({
       console.log(error);
       set({
         error: error?.response?.data.message || "Error signing up",
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
+
+  verifyEmail: async (email: string, code: string) => {
+    // console.log("v");
+    try {
+      // console.log("object");
+      set({ isLoading: true, error: null });
+      const response = await axios.post("/auth/verify-email", {
+        email,
+        code,
+      });
+      set({
+        isLoading: false,
+        user: response.data.data.user,
+        isAuthenticated: true,
+      });
+    } catch (error: any) {
+      console.log(error);
+      set({
+        error: error?.response?.data.message || "Error verifying email",
         isLoading: false,
       });
       throw error;
@@ -92,7 +117,9 @@ export const useUserStore = create<UserStore>((set) => ({
         error: error?.response?.data.message || "Error signing out",
         isLoading: false,
       });
-      throw error;
+      if (error.response.status === 401) {
+        set({ user: null, isAuthenticated: false, isLoading: false });
+      }
     }
   },
 
