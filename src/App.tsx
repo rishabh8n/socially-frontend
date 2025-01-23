@@ -9,6 +9,8 @@ import { useEffect } from "react";
 // redirect authenticated users to the home page
 import { ReactNode } from "react";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -44,6 +46,9 @@ function App() {
           <Route path="signup" element={<SignupPage />} />
           <Route path="signin" element={<SigninPage />} />
           <Route path="verify" element={<EmailVerificationPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+          {/* <Route path="*" element={<Navigate to="/auth/signin" />} /> */}
         </Route>
         <Route path="/" element={<HomePage />} />
       </Routes>
