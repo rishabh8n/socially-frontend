@@ -37,7 +37,6 @@ export const useUserStore = create<UserStore>((set) => ({
         isLoading: false,
       });
     } catch (error: any) {
-      console.log(error);
       set({
         error: error?.response?.data.message || "Error signing up",
         isLoading: false,
@@ -61,7 +60,6 @@ export const useUserStore = create<UserStore>((set) => ({
         isAuthenticated: true,
       });
     } catch (error: any) {
-      console.log(error);
       set({
         error: error?.response?.data.message || "Error verifying email",
         isLoading: false,
@@ -112,7 +110,6 @@ export const useUserStore = create<UserStore>((set) => ({
       await axios.post("/auth/logout");
       set({ user: null, isAuthenticated: false, isLoading: false });
     } catch (error: any) {
-      console.log(error);
       set({
         error: error?.response?.data.message || "Error signing out",
         isLoading: false,

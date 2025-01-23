@@ -39,8 +39,11 @@ const SigninPage = () => {
   }, []);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    await signin(data.email, data.password);
+    try {
+      await signin(data.email, data.password);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const response = async (authResult: any) => {
