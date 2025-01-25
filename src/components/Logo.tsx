@@ -6,7 +6,7 @@ interface LogoProps {
   iconSize?: number;
 }
 
-const Logo = ({ fontSize = "text-2xl", iconSize = 20 }: LogoProps) => {
+const Logo = ({ fontSize = "text-2xl" }: LogoProps) => {
   return (
     <Link
       to="/"
