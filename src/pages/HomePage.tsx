@@ -13,6 +13,7 @@ const HomePage = () => {
         <>
           <h1 className="text-3xl font-bold">Hola, {user.username}</h1>
           <p>{user.email}</p>
+          <Link to={`/profile/${user.username}`}>Profile</Link>
           <Button onClick={handleSignout}>Sign out</Button>
         </>
       ) : (
