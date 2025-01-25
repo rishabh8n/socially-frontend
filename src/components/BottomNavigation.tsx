@@ -12,7 +12,7 @@ const BottomNavigation = () => {
   const pathname = useLocation().pathname.split("/")[1];
   const { user } = useUserStore();
   return (
-    <div className="md:hidden absolute inset-x-0 bottom-0 h-24 grid grid-rows-[1fr,2.5fr,.5fr] grid-cols-5 place-items-center">
+    <div className="md:hidden fixed inset-x-0 bottom-0 h-24 grid grid-rows-[1fr,2.5fr,.5fr] grid-cols-5 place-items-center">
       <div className="h-full bg-white row-start-2 row-span-2 col-start-1 col-span-5 rounded-t-2xl w-full shadow-[0_-1px_5px_0px_#0005]"></div>
       <div className="h-full row-start-2 col-start-1 flex items-center justify-center">
         <Link
