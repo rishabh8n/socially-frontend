@@ -21,6 +21,13 @@ const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
   return children;
 };
 
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const { isAuthenticated, user } = useUserStore();
+  if (!isAuthenticated || !user.isVerified)
+    return <Navigate to="/auth/signin" />;
+  return children;
+};
+
 function App() {
   const { isChecking, checkAuth } = useUserStore();
 
@@ -55,8 +62,22 @@ function App() {
         </Route>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="profile/:username" element={<ProfilePage />} />
+          <Route
+            path="search"
+            element={
+              <ProtectedRoute>
+                <SearchPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profile/:username"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<>404</>} />
         </Route>
       </Routes>

@@ -57,7 +57,7 @@ const BottomNavigation = () => {
       </div>
       <div className="h-full row-start-2 col-start-5 flex items-center justify-center">
         <Link
-          to={`/profile/${user?.username ? user.username : ""}`}
+          to={`/profile/${user?.username}`}
           className={cn(
             "p-3 hover:text-accent",
             pathname === "profile" && "text-accent"

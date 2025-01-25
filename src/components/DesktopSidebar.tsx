@@ -48,7 +48,6 @@ const routes = [
 const DesktopSidebar = () => {
   const pathname = useLocation().pathname.split("/")[1];
   const { user } = useUserStore();
-  console.log(pathname);
   return (
     <div className="hidden relative md:flex flex-col min-w-[280px] max-w-[280px] h-screen overflow-hidden w-full bg-primary/5 text-muted-foreground border-r-2 border-separate p-4">
       <div className="flex items-center gap-2 mt-1">
@@ -59,7 +58,7 @@ const DesktopSidebar = () => {
           <Link
             to={
               route.href === "profile"
-                ? `/${route.href}/${user?.username ? user.username : ""}`
+                ? `/${route.href}/${user?.username}`
                 : `/${route.href}`
             }
             className={cn(
