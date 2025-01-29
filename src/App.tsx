@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthLayout from "./layout/AuthLayout";
 import SignupPage from "./pages/SignupPage";
 import SigninPage from "./pages/SigninPage";
@@ -14,6 +15,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import MainLayout from "./layout/MainLayout";
 import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from "./pages/EditProfilePage";
 
 const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -27,6 +29,8 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     return <Navigate to="/auth/signin" />;
   return children;
 };
+
+const queryClient = new QueryClient();
 
 function App() {
   const { isChecking, checkAuth } = useUserStore();
@@ -44,43 +48,56 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route
-          path="auth"
-          element={
-            <RedirectAuthenticated>
-              <AuthLayout />
-            </RedirectAuthenticated>
-          }
-        >
-          <Route path="signup" element={<SignupPage />} />
-          <Route path="signin" element={<SigninPage />} />
-          <Route path="verify" element={<EmailVerificationPage />} />
-          <Route path="forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="reset-password/:token" element={<ResetPasswordPage />} />
-          <Route path="*" element={<Navigate to="/auth/signin" />} />
-        </Route>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
+      <QueryClientProvider client={queryClient}>
+        <Routes>
           <Route
-            path="search"
+            path="auth"
+            element={
+              <RedirectAuthenticated>
+                <AuthLayout />
+              </RedirectAuthenticated>
+            }
+          >
+            <Route path="signup" element={<SignupPage />} />
+            <Route path="signin" element={<SigninPage />} />
+            <Route path="verify" element={<EmailVerificationPage />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
+            <Route
+              path="reset-password/:token"
+              element={<ResetPasswordPage />}
+            />
+            <Route path="*" element={<Navigate to="/auth/signin" />} />
+          </Route>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route
+              path="search"
+              element={
+                <ProtectedRoute>
+                  <SearchPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile/:username"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<>404</>} />
+          </Route>
+          <Route
+            path="profile/edit"
             element={
               <ProtectedRoute>
-                <SearchPage />
+                <EditProfilePage />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="profile/:username"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<>404</>} />
-        </Route>
-      </Routes>
+        </Routes>
+      </QueryClientProvider>
     </>
   );
 }

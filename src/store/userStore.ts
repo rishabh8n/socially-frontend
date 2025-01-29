@@ -14,6 +14,7 @@ interface UserStore {
   signout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   verifyEmail: (email: string, code: string) => Promise<void>;
+  uploadAvatar: (file: any) => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -131,6 +132,19 @@ export const useUserStore = create<UserStore>((set) => ({
       });
     } catch (error) {
       set({ isChecking: false });
+    }
+  },
+  uploadAvatar: async (formData: any) => {
+    try {
+      const response = await axios.put("/profile/update-avatar", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      set((state) => ({
+        user: { ...state.user, avatar: response.data.data.avatar },
+      }));
+      console.log(response);
+    } catch (error) {
+      console.log(error);
     }
   },
 }));
