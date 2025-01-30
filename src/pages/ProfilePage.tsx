@@ -152,9 +152,12 @@ const ProfilePage = () => {
             {data.fullName}
           </p>
         )}
-        <p className="md:max-w-[500px] md:col-start-2 md:col-span-2 col-span-3 mt-2 md:mt-0 px-2 md:p-0">
-          Nit KKR'27
-        </p>
+        {data.bio && (
+          <pre className="md:max-w-[500px] md:col-start-2 md:col-span-2 col-span-3 mt-1 md:mt-0 px-2 md:p-0">
+            {data.bio}
+          </pre>
+        )}
+
         <div className="md:hidden flex items-center gap-4 col-span-3 justify-self-center mt-4 w-full">
           {data.username === user?.username ? (
             <Button

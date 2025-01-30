@@ -15,6 +15,7 @@ interface UserStore {
   checkAuth: () => Promise<void>;
   verifyEmail: (email: string, code: string) => Promise<void>;
   uploadAvatar: (file: any) => Promise<void>;
+  updateProfile: (data: any) => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -47,9 +48,7 @@ export const useUserStore = create<UserStore>((set) => ({
   },
 
   verifyEmail: async (email: string, code: string) => {
-    // console.log("v");
     try {
-      // console.log("object");
       set({ isLoading: true, error: null });
       const response = await axios.post("/auth/verify-email", {
         email,
@@ -142,9 +141,24 @@ export const useUserStore = create<UserStore>((set) => ({
       set((state) => ({
         user: { ...state.user, avatar: response.data.data.avatar },
       }));
-      console.log(response);
     } catch (error) {
       console.log(error);
+    }
+  },
+  updateProfile: async (data: any) => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await axios.put("/profile/update-profile", data);
+      set({
+        user: response.data.data,
+        isLoading: false,
+      });
+    } catch (error: any) {
+      set({
+        error: error?.response?.data.message || "Error updating profile",
+        isLoading: false,
+      });
+      throw error;
     }
   },
 }));
