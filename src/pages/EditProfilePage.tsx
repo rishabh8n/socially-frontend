@@ -2,6 +2,7 @@ import DesktopSidebar from "@/components/DesktopSidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store/userStore";
+import { useDebouncedCallback } from "use-debounce";
 import {
   Form,
   FormControl,
@@ -24,6 +25,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
+import axios from "@/axios/axios";
 
 const profileSchema = z.object({
   username: z.string().min(3).max(20),
@@ -37,6 +39,7 @@ const EditProfilePage = () => {
   const inputFile = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -47,6 +50,20 @@ const EditProfilePage = () => {
       gender: user?.gender ? user.gender : "male",
     },
   });
+
+  const checkUsername = useDebouncedCallback(async (data: string) => {
+    try {
+      if (!data || data === user.username) {
+        return;
+      }
+      const response = await axios.post(`/profile/username-available`, {
+        username: data,
+      });
+      setUsernameAvailable(response.data.data.available);
+    } catch (error) {
+      console.log(error);
+    }
+  }, 1000);
 
   const handleChange = async (e: any) => {
     const file = e.target.files[0];
@@ -68,7 +85,7 @@ const EditProfilePage = () => {
       setIsLoading(true);
       setError("");
       await updateProfile(data);
-      navigate(`/profile/${user.username}`);
+      navigate(`/profile/${data.username}`);
       setIsLoading(false);
     } catch (error: any) {
       setError(error?.response?.data.message || "Error updating profile");
@@ -130,12 +147,24 @@ const EditProfilePage = () => {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        type="text"
-                        className="w-full py-5"
-                        placeholder="Enter your username"
-                      />
+                      <>
+                        <Input
+                          {...field}
+                          type="text"
+                          className="w-full py-5"
+                          placeholder="Enter your username"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setUsernameAvailable(true);
+                            checkUsername(e.target.value);
+                          }}
+                        />
+                        {!usernameAvailable && (
+                          <p className="text-red-500 text-sm">
+                            Username is not available
+                          </p>
+                        )}
+                      </>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,7 +234,7 @@ const EditProfilePage = () => {
               <Button
                 type="submit"
                 className="md:w-52 w-full p-5"
-                disabled={isLoading}
+                disabled={isLoading || !usernameAvailable}
               >
                 {isLoading ? "Loading..." : "Save"}
               </Button>
