@@ -81,12 +81,12 @@ const ProfilePage = () => {
         )}
       </div>
       <div className="md:mt-16 grid-cols-[auto,2fr,2fr] grid md:grid-cols-[1fr,2fr,2fr] md:gap-x-12 gap-x-2 md:gap-y-4 w-full max-w-[700px]">
-        <div className="p-2 md:justify-self-center place-self-start row-span-2 md:row-span-3">
+        <div className="p-2 w-full md:justify-self-center place-self-start row-span-2 md:row-span-3">
           {data?.avatar ? (
             <img
               src={data.avatar}
               alt="avatar"
-              className="md:w-24 md:h-24 w-12 h-12 rounded-full"
+              className="md:w-full md:max-w-24 aspect-square w-16 rounded-full"
             />
           ) : (
             <div className="md:w-24 md:h-24 w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
