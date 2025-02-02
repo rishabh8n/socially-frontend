@@ -16,6 +16,8 @@ import MainLayout from "./layout/MainLayout";
 import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
+import FollowersPage from "./pages/FollowersPage";
+import FollowingPage from "./pages/FollowingPage";
 
 const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -83,6 +85,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile/:username/followers"
+              element={
+                <ProtectedRoute>
+                  <FollowersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile/:username/following"
+              element={
+                <ProtectedRoute>
+                  <FollowingPage />
                 </ProtectedRoute>
               }
             />
