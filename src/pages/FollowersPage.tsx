@@ -32,7 +32,7 @@ const FollowersPage = () => {
           return (
             <ProfileCard
               key={follower.followerId}
-              follower={follower}
+              userDetails={follower}
               refetch={refetch}
             />
           );

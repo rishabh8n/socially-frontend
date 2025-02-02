@@ -4,25 +4,28 @@ import { UserIcon } from "lucide-react";
 import axios from "@/axios/axios";
 import { useNavigate } from "react-router";
 import { QueryObserverResult } from "@tanstack/react-query";
+import { useState } from "react";
 
 const ProfileCard = ({
-  follower,
+  userDetails,
   refetch,
 }: {
-  follower: any;
-  refetch: () => Promise<QueryObserverResult<any, Error>>;
+  userDetails: any;
+  refetch?: () => Promise<QueryObserverResult<any, Error>>;
 }) => {
   const { user } = useUserStore();
   const navigate = useNavigate();
+  const [isFollowing, setIsFollowing] = useState(userDetails.isFollowing);
   const handleClick = async (e: any) => {
     try {
       e.stopPropagation();
       const response = await axios.post(
-        `/profile/${follower.isFollowing ? "unfollow" : "follow"}`,
-        { username: follower.username }
+        `/profile/${isFollowing ? "unfollow" : "follow"}`,
+        { username: userDetails.username }
       );
       if (response.status === 201) {
-        refetch();
+        setIsFollowing(!isFollowing);
+        refetch && refetch();
       }
     } catch (error) {
       console.log(error);
@@ -32,13 +35,13 @@ const ProfileCard = ({
   return (
     <div
       className="flex items-center space-x-3 w-full p-1"
-      onClick={() => navigate(`/profile/${follower.username}`)}
+      onClick={() => navigate(`/profile/${userDetails.username}`)}
     >
-      {follower?.avatar ? (
+      {userDetails?.avatar ? (
         <img
-          src={follower.avatar}
+          src={userDetails.avatar}
           alt="avatar"
-          className="aspect-square w-12 rounded-full"
+          className="aspect-square w-12 rounded-full object-cover"
         />
       ) : (
         <div className="w-[48px] h-[48px] aspect-square rounded-full bg-gray-200 flex items-center justify-center">
@@ -46,12 +49,12 @@ const ProfileCard = ({
         </div>
       )}
       <div className="basis-full pointer-events-none">
-        <p className="text-sm">{follower.username}</p>
-        {follower.fullName && <p>{follower.fullName}</p>}
+        <p className="text-sm">{userDetails.username}</p>
+        {userDetails.fullName && <p>{userDetails.fullName}</p>}
       </div>
-      {user.username !== follower.username && (
-        <Button className="py-1 px-4" onClick={handleClick}>
-          {follower.isFollowing ? "Unfollow" : "Follow"}
+      {user.username !== userDetails.username && (
+        <Button className="py-1 w-32 px-0" onClick={handleClick}>
+          {isFollowing ? "Unfollow" : "Follow"}
         </Button>
       )}
     </div>
